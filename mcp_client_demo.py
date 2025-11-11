@@ -107,7 +107,7 @@ class MCPClient:
             for fut in self._response_futures.values():
                 if not fut.done():
                     fut.set_exception(ConnectionError("Connection lost"))
-
+ 
     async def _read_message(self) -> Optional[Dict[str, Any]]:
         assert self._reader is not None
         # Read length prefix
