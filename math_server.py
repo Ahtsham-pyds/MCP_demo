@@ -13,4 +13,5 @@ def multiply(a: int, b: int) -> int:
     return a * b
 
 if __name__ == "__main__":
+    print('Session math server on stdio...')
     mcp.run(transport="stdio")
