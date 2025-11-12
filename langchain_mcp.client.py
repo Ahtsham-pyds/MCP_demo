@@ -33,7 +33,10 @@ server_params = StdioServerParameters(
 )
 async def run_app(user_question):
     
-    client = MultiServerMCPClient({
+    client = MultiServerMCPClient({"weather": {
+                "url": "http://localhost:8000/sse",
+                "transport": "sse",
+            },
     "math": {
         "command": "python",
         # Make sure to update to the full absolute path to your math_server.py file
@@ -42,7 +45,7 @@ async def run_app(user_question):
     }
 })
 
-    async with client.session("math") as session:
+    async with client.session("weather") as session:
         tools = await load_mcp_tools(session)
         # Load tools from the MCP client
         agent = create_agent(model, tools)
@@ -52,8 +55,8 @@ async def run_app(user_question):
         return agent_response['messages'][-1].content
 if __name__ == "__main__":
     #user_question = "what is the weather in california?"
-    user_question = "what's (3 + 5) x 12?"
-    #user_question = "what's the weather in seattle?"
+    #user_question = "what's (3 + 5) x 12?"
+    user_question = "what's the weather in seattle?"
     #user_question = "what's the weather in NYC?"
     response = asyncio.run(run_app(user_question=user_question))
     print(response)
