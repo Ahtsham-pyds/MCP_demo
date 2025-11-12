@@ -45,14 +45,20 @@ async def run_app(user_question):
     }
 })
 
-    async with client.session("weather") as session:
-        tools = await load_mcp_tools(session)
-        # Load tools from the MCP client
-        agent = create_agent(model, tools)
-        agent_response = await agent.ainvoke({"messages": user_question})
-        print(agent_response['messages'][-1].content)
-        
-        return agent_response['messages'][-1].content
+    all_tools = []
+
+    # Collect tools from all servers
+    for name in ["math", "weather"]:
+        async with client.session("weather") as session:
+            tools = await load_mcp_tools(session)
+            all_tools.extend(tools) 
+
+            # Load tools from the MCP client
+            agent = create_agent(model, all_tools)
+            agent_response = await agent.ainvoke({"messages": user_question})
+            print(agent_response['messages'][-1].content)
+    
+    return agent_response['messages'][-1].content
 if __name__ == "__main__":
     #user_question = "what is the weather in california?"
     #user_question = "what's (3 + 5) x 12?"
