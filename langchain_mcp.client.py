@@ -9,9 +9,7 @@ from langgraph.prebuilt import create_react_agent
 from langchain.agents import create_agent
 
 from langchain_mcp_adapters.client import MultiServerMCPClient
-#from langchain_azure_ai.chat_models import AzureAIChatCompletionsModel
-from langchain_groq import ChatGroq
-from langchain_ollama import ChatOllama
+
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
 from dotenv import load_dotenv
@@ -56,7 +54,7 @@ async def run_app(user_question):
             # Load tools from the MCP client
         agent = create_agent(model, all_tools)
         agent_response = await agent.ainvoke({"messages": user_question})
-        #print(agent_response['messages'][-1].content)
+       
     
     return agent_response['messages'][-1].content
 if __name__ == "__main__":
